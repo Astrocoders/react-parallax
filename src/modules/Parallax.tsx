@@ -62,6 +62,7 @@ class Parallax extends ParallaxClass {
         className: '',
         contentClassName: '',
         disabled: false,
+        heigthEnd: false,
         strength: 100,
     };
 
@@ -178,15 +179,35 @@ class Parallax extends ParallaxClass {
     };
 
     setBackgroundPosition(percentage: number): void {
-        const { disabled, strength } = this.props;
+        const { disabled, strength, heightEnd } = this.props;
         // don't do unneccessary style processing if parallax is disabled
-        if (disabled === true) {
+        if (disabled === true) return;
+
+        const { bgStyle } = this.state;
+
+        const inverse = strength < 0;
+
+        if (heightEnd) {
+            const pos = -this.contentHeight * percentage + strength;
+
+            const transform = `translate3d(-50%, ${pos}px, 0)`;
+
+            if (percentage < 0) return;
+
+            this.setState({
+                bgStyle: {
+                    ...bgStyle,
+                    WebkitTransform: transform,
+                    transform,
+                },
+                percentage,
+            });
+
             return;
         }
 
-        const { bgStyle } = this.state;
-        const inverse = strength < 0;
         const pos = (inverse ? strength : 0) - strength * percentage;
+
         const transform = `translate3d(-50%, ${pos}px, 0)`;
 
         this.setState({

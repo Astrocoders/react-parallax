@@ -27,6 +27,7 @@ export type ParallaxProps = {
     renderLayer?: (percentage: number) => any;
     strength?: number;
     style?: { [key: string]: any };
+    heightEnd?: boolean;
 };
 
 type ParallaxState = {
